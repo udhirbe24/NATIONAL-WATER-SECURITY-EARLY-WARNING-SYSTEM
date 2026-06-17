@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Officer Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <script>
+        if(sessionStorage.getItem('role') !== 'ResourceOfficer') window.location.href = '/';
+    </script>
+    <div class="sidebar">
+        <h2 class="brand">NWSEWS | Officer</h2>
+        <button class="nav-link active" onclick="switchTab('dashboard', this)">Dashboard</button>
+        <button class="nav-link" onclick="switchTab('rainfall', this)">Enter Rainfall</button>
+        <button class="nav-link" onclick="switchTab('groundwater', this)">Enter Groundwater</button>
+        <button class="nav-link" onclick="switchTab('reservoir', this)">Enter Reservoir</button>
+        <button class="nav-link" onclick="switchTab('quality', this)">Enter Water Quality</button>
+        <div class="profile-panel">
+            <div class="profile-name" id="profName">-</div>
+            <div class="profile-role">Resource Officer</div>
+            <div class="profile-stat">
+                Entries Filled: <strong id="profEntries">0</strong>
+            </div>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="topbar">
+            <div class="welcome" id="welcomeMsg"></div>
+        </div>
+        
+        <div id="dashboard" class="tab-content active">
+            <div class="card" style="max-width: 800px;">
+                <h3 style="margin-bottom: 16px;">Welcome to the Field Operations Portal</h3>
+                <p style="color: var(--text-sec); line-height: 1.6;">Use the sidebar navigation to enter daily field readings. Please ensure accuracy, as inputs are processed in real-time by the warning system.</p>
+            </div>
+        </div>
+        
+        <div id="rainfall" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Log Rainfall Data</h3>
+                <form id="rainForm">
+                    <div class="form-group"><label>Region</label><select id="rainRegion" required></select></div>
+                    <div class="form-group"><label>Date</label><input type="date" id="rainDate" required></div>
+                    <div class="form-group"><label>Rainfall Amount (mm)</label><input type="number" step="0.1" id="rainAmt" required></div>
+                    <button type="submit" class="btn">Submit</button>
+                    <div class="toast toast-success" id="rainSuccess">Rainfall data submitted successfully</div>
+                    <div class="toast toast-error" id="rainError">Error submitting data</div>
+                </form>
+            </div>
+        </div>
+
+        <div id="groundwater" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Log Groundwater Depth</h3>
+                <form id="gwForm">
+                    <div class="form-group"><label>Region</label><select id="gwRegion" required></select></div>
+                    <div class="form-group"><label>Date</label><input type="date" id="gwDate" required></div>
+                    <div class="form-group"><label>Depth (meters)</label><input type="number" step="0.1" id="gwDepth" required></div>
+                    <button type="submit" class="btn">Submit</button>
+                    <div class="toast toast-success" id="gwSuccess">Groundwater data submitted successfully</div>
+                    <div class="toast toast-error" id="gwError">Error submitting data</div>
+                </form>
+            </div>
+        </div>
+
+        <div id="reservoir" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Add New Reservoir</h3>
+                <form id="resForm">
+                    <div class="form-group"><label>Reservoir Name</label><input type="text" id="resName" required></div>
+                    <div class="form-group"><label>Region</label><select id="resRegion" required></select></div>
+                    <div class="form-group"><label>Capacity (million litres)</label><input type="number" step="0.1" id="resCap" required></div>
+                    <div class="form-group"><label>Current Level (million litres)</label><input type="number" step="0.1" id="resLvl" required></div>
+                    <button type="submit" class="btn">Submit</button>
+                    <div class="toast toast-success" id="resSuccess">Reservoir data submitted. Flood/Drought alerts auto-generated if thresholds exceeded.</div>
+                    <div class="toast toast-error" id="resError">Error submitting data</div>
+                </form>
+            </div>
+        </div>
+
+        <div id="quality" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Log Water Quality</h3>
+                <form id="wqForm">
+                    <div class="form-group"><label>Reservoir</label><select id="wqRes" required></select></div>
+                    <div class="form-group">
+                        <label>pH Level</label>
+                        <input type="number" step="0.1" min="0" max="14" id="wqPh" required>
+                        <div class="inline-error" id="phErr">Must be between 0 and 14</div>
+                    </div>
+                    <div class="form-group"><label>Turbidity</label><input type="number" step="0.1" id="wqTurb" required></div>
+                    <button type="submit" class="btn">Submit</button>
+                    <div class="toast toast-success" id="wqSuccess">Water quality submitted. Contamination alert auto-generated if thresholds exceeded.</div>
+                    <div class="toast toast-error" id="wqError">Error submitting data</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/officer.js') }}"></script>
+</body>
+</html>

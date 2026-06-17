@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Water Security & Early Warning System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+    <div class="logo">
+        <svg viewBox="0 0 24 24"><path d="M12 21.5c-3.58 0-6.5-2.92-6.5-6.5 0-3.35 2.58-6.9 6.5-12.33 3.92 5.43 6.5 8.98 6.5 12.33 0 3.58-2.92 6.5-6.5 6.5z"/></svg>
+    </div>
+    <h1>National Water Security & Early Warning System</h1>
+    <h2>UCS310 — Thapar Institute of Engineering & Technology</h2>
+    
+    <div class="card login-card" style="padding: 0;">
+        <div class="form-header">
+            <div class="form-tab active" onclick="switchForm('login')">Login</div>
+            <div class="form-tab" onclick="switchForm('register')">Register</div>
+        </div>
+        
+        <div style="padding: 32px;">
+            <form id="loginForm" class="form-section active">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <div class="error" id="errorMsg">Invalid username or password</div>
+            </form>
+
+            <form id="registerForm" class="form-section">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="reg-username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="reg-role" required>
+                        <option value="User">User</option>
+                        <option value="ResourceOfficer">Resource Officer</option>
+                        <option value="MonitoringAuthority">Monitoring Authority</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Register</button>
+                <div class="error" id="regErrorMsg"></div>
+                <div class="toast-success" id="regSuccessMsg" style="display: none; margin-top: 10px; font-size: 14px; text-align: center;">Registration successful. Please login.</div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card login-card sample-creds">
+        <strong>Sample Credentials:</strong><br>
+        User: admin1 / admin123<br>
+        Officer: officer1 / off123<br>
+        Monitor: monitor1 / mon123
+    </div>
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

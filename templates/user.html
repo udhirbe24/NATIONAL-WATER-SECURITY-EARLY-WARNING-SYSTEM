@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <script>
+        if(sessionStorage.getItem('role') !== 'User') window.location.href = '/';
+    </script>
+    <div class="sidebar">
+        <h2 class="brand">NWSEWS</h2>
+        <button class="nav-link active" onclick="switchTab('dashboard', this)">Dashboard</button>
+        <button class="nav-link" onclick="switchTab('alerts', this)">All Alerts</button>
+        <button class="nav-link" onclick="switchTab('regions', this)">All Regions</button>
+        <div class="profile-panel">
+            <div class="profile-name" id="profName">-</div>
+            <div class="profile-role">User</div>
+            <div class="profile-stat">
+                Alerts Resolved: <strong id="profEntries">0</strong>
+            </div>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="topbar">
+            <div class="welcome" id="welcomeMsg"></div>
+        </div>
+        
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <h3>Total Regions 🌍</h3>
+                    <div class="value" id="stat-regions">-</div>
+                </div>
+                <div class="card stat-card">
+                    <h3>Total Reservoirs 💧</h3>
+                    <div class="value" id="stat-reservoirs">-</div>
+                </div>
+                <div class="card stat-card">
+                    <h3>Active Alerts ⚠️</h3>
+                    <div class="value" id="stat-alerts">-</div>
+                </div>
+                <div class="card stat-card" style="border-bottom: 3px solid var(--critical)">
+                    <h3>Critical Alerts 🚨</h3>
+                    <div class="value" id="stat-critical" style="color: var(--critical)">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="alerts" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom:16px;">All System Alerts</h3>
+                <table id="alertsTable">
+                    <thead><tr><th>Alert ID</th><th>Region</th><th>Type</th><th>Level</th><th>Timestamp</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="regions" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom:16px;">Monitored Regions</h3>
+                <table id="regionsTable">
+                    <thead><tr><th>Region Name</th><th>State</th><th>Population</th><th>Climate Type</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/user.js') }}"></script>
+</body>
+</html>

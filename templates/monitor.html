@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <script>
+        if(sessionStorage.getItem('role') !== 'MonitoringAuthority') window.location.href = '/';
+    </script>
+    <div class="sidebar">
+        <h2 class="brand">NWSEWS | Monitor</h2>
+        <button class="nav-link active" onclick="switchTab('overview', this)">Overview</button>
+        <button class="nav-link" onclick="switchTab('alerts', this)">Alerts</button>
+        <button class="nav-link" onclick="switchTab('reservoirs', this)">Reservoirs</button>
+        <button class="nav-link" onclick="switchTab('quality', this)">Water Quality</button>
+        <button class="nav-link" onclick="switchTab('trends', this)">Rainfall Trends</button>
+        <div class="profile-panel">
+            <div class="profile-name" id="profName">-</div>
+            <div class="profile-role">Monitoring Authority</div>
+            <div class="profile-stat" style="display:none">
+                <!-- No entries tracked for monitor -->
+            </div>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="topbar">
+            <div class="welcome" id="welcomeMsg"></div>
+        </div>
+        
+        <div id="overview" class="tab-content active">
+            <div class="stats-grid">
+                <div class="card stat-card"><h3>Total Regions</h3><div class="value" id="stat-regions">-</div></div>
+                <div class="card stat-card"><h3>Total Reservoirs</h3><div class="value" id="stat-reservoirs">-</div></div>
+                <div class="card stat-card"><h3>Active Alerts</h3><div class="value" id="stat-alerts">-</div></div>
+                <div class="card stat-card" style="border-bottom: 3px solid var(--critical)"><h3>Critical Alerts</h3><div class="value" id="stat-critical" style="color: var(--critical)">-</div></div>
+            </div>
+            <div class="card" style="height: 400px;">
+                <canvas id="overviewChart"></canvas>
+            </div>
+        </div>
+
+        <div id="alerts" class="tab-content">
+            <div class="card">
+                <select id="alertFilter" onchange="loadAlerts()"><option value="">All Regions</option></select>
+                <table id="alertsTable">
+                    <thead><tr><th>Alert ID</th><th>Region</th><th>Type</th><th>Level</th><th>Timestamp</th><th>Status</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="reservoirs" class="tab-content">
+            <div class="card">
+                <table id="resTable">
+                    <thead><tr><th>Reservoir Name</th><th>Region</th><th>Capacity</th><th>Current Level</th><th>Fill%</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="quality" class="tab-content">
+            <div class="card">
+                <table id="wqTable">
+                    <thead><tr><th>Reservoir</th><th>Region</th><th>pH Level</th><th>Turbidity</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="trends" class="tab-content">
+            <div class="card">
+                <select id="trendFilter" onchange="loadTrends()"><option value="">Select Region...</option></select>
+                <div style="height: 400px;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/monitor.js') }}"></script>
+</body>
+</html>
