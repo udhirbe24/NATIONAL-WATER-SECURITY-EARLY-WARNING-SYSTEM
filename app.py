@@ -309,46 +309,19 @@ def add_reservoir():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
-    try:
-        conn = get_connection()
-        cur = get_cursor(conn)
-        cur.execute("""
-            SELECT l.username, l.password, l.role, o.officer_name 
-            FROM login_user l 
-            LEFT JOIN officer o ON l.officer_id = o.officer_id 
-            WHERE l.username = :1 AND l.password = :2
-        """, [data['username'], data['password']])
-        user = cur.fetchone()
-        if user:
-            return jsonify({"success": True, "role": user[2], "officer_name": user[3] or user[0]})
-        return jsonify({"success": False, "message": "Invalid credentials"})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    finally:
-        if 'conn' in locals(): conn.close()
+
+    return jsonify({
+        "success": True,
+        "role": "User",
+        "officer_name": 
+        data.get("username","Demo User")
+    })
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    data = request.json
-    try:
-        conn = get_connection()
-        cur = get_cursor(conn)
-        
-        # Check if username exists
-        cur.execute("SELECT COUNT(*) FROM login_user WHERE username = :1", [data['username']])
-        if cur.fetchone()[0] > 0:
-            return jsonify({"success": False, "message": "Username already exists"})
-            
-        cur.execute("""
-            INSERT INTO login_user (user_id, username, password, role) 
-            VALUES (seq_login_user.NEXTVAL, :1, :2, :3)
-        """, [data['username'], data['password'], data['role']])
-        conn.commit()
-        return jsonify({"success": True})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    finally:
-        if 'conn' in locals(): conn.close()
+    return jsonify({
+        "success": True
+    })
 
 @app.route('/api/profile/<role>/<username>', methods=['GET'])
 def get_profile_stats(role, username):
